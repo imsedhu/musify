@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Musify</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  
+</head>
+<body>
+  <div class="container">
+    <img id="song-img">
+    <p id="song-title">song Name</p>
+    <p id="song-artist">artist</p>
+    <input type="range" onclick="changeDuration()" id="range" min="0" max="100" value="0">
+    <button onclick="preSong()" id="pre"><i class="fa fa-backward"></i></button>
+    <button onclick="justplay()" id="play"><i class="fa fa-play"></i></button>
+    <button onclick="nextSong()" id="next"><i class="fa fa-forward"></i></button>
+  </div>
+
+
+
+
+  <script>
+let previous = document.querySelector('#pre');
+let play = document.querySelector('#play');
+let next = document.querySelector('#next');
+let track_image = document.querySelector('#song-img');
+let title = document.querySelector('#song-title');
+let artist = document.querySelector('#song-artist');
+let slider = document.querySelector('#range');
+
+let timer;
+let autoplay = 1;
+
+let index_no = 0;
+let playing_song = false;
+
+let track = document.createElement('audio');
+
+let All_song = [
+  {
+    name: "Hukum(From Jailer)",
+    path: "songs/Hukum.mp3",
+    img: "image/jailer.jpeg",
+    artist: "Anirudh Ravichandar"
+  },
+  {
+    name: "Naa Ready(From Leo",
+    path: "songs/Naa-Ready.mp3",
+    img: "image/leo.jpeg",
+    artist: "Anirudh Ravichandar"
+  },
+  {
+    name: "Vikram Title Track(from Vikram)",
+    path: "songs/Vikram.mp3",
+    img: "image/vikram.jpeg",
+    artist: "Anirudh Ravichandar"
+  }
+];
+
+function load_track(index_no){
+  clearInterval(timer);
+  reset_slider();
+
+  track.src = All_song[index_no].path;
+  title.innerHTML = All_song[index_no].name;
+  track_image.src = All_song[index_no].img;
+  artist.innerHTML = All_song[index_no].artist;
+
+  timer = setInterval(range_slider, 1000);
+  total.innerHTML = All_song.length;
+  Present.innerHTML = index_no + 1;
+};
+
+load_track(index_no); 
+
+function justplay(){
+  if(playing_song == false){
+    playsong();
+  }else{
+    pausesong();
+  }
+};
+
+function reset_slider(){
+  slider.value = 0;
+}
+
+function playsong(){
+  track.play();
+  playing_song = true;
+  play.innerHTML = '<i class="fa fa-pause"></i>'
+};
+
+function pausesong(){
+  track.pause();
+  playing_song = false;
+  play.innerHTML = '<i class="fa fa-play"><i>'
+};
+
+function nextSong(){
+  if(index_no < All_song.length -1){
+    index_no += 1;
+    load_track(index_no);
+    playsong();
+  }else{
+    index_no = 0;
+    load_track(index_no);
+    playsong();
+  }
+}; 
+
+function preSong(){
+  if(index_no > 0){
+    index_no += -1;
+    load_track(index_no);
+    playsong();
+  }else{
+    index_no = All_song.length;
+    load_track(index_no);
+    playsong();
+  }
+}; 
+
+
+function changeDuration(){
+  slider_position = track.duration * (slider.value/100);
+  track.currentTime = slider_position;
+};
+  </script>
+</body>
+</html>
